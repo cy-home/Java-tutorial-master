@@ -1,0 +1,64 @@
+package org.java.study.thread.chapter_four.section1.thread_1_6.project_mustUseMoreCondition;
+
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class MyService {
+
+    private Lock lock = new ReentrantLock();
+    public Condition conditionA = lock.newCondition();
+    public Condition conditionB = lock.newCondition();
+
+    public void awaitA(){
+        try {
+            lock.lock();
+            String threadName = Thread.currentThread().getName();
+            System.out.println("begin awaitA 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+            conditionA.await();
+            System.out.println("end awaitA 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void awaitB(){
+        try {
+            lock.lock();
+            String threadName = Thread.currentThread().getName();
+            System.out.println("begin awaitB 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+            conditionB.await();
+            System.out.println("end awaitB 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void signalAll_A(){
+        try {
+            lock.lock();
+            String threadName = Thread.currentThread().getName();
+            System.out.println("begin signalAll_A 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+            conditionA.signalAll();
+            System.out.println("end signalAll_A 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void signalAll_B(){
+        try {
+            lock.lock();
+            String threadName = Thread.currentThread().getName();
+            System.out.println("begin signalAll_B 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+            conditionB.signalAll();
+            System.out.println("end signalAll_B 时间为："+System.currentTimeMillis()+" threadName="+threadName);
+        } finally {
+            lock.unlock();
+        }
+    }
+}
